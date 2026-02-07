@@ -7,6 +7,9 @@ pipeline {
         GIT_CREDENTIALS_ID = 'github-ssh-credentials'
         GIT_BRANCH = 'main'
         
+        // Ensure docker is in PATH
+        PATH = "/usr/local/bin:$PATH"
+        
         // Docker Hub password (WARNING: HARDCODED - NOT SECURE)
         DOCKER_PASSWORD = '2003$vimu'
         
@@ -53,6 +56,13 @@ pipeline {
                 echo 'Logging into Docker Hub...'
                 // WARNING: Login using hardcoded password
                 sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin'
+            }
+        }
+        
+        stage('Build Docker Image') {
+            steps {
+                echo "Building Docker image ${LOCAL_IMAGE}..."
+                sh "docker build -t ${LOCAL_IMAGE} ."
             }
         }
         
