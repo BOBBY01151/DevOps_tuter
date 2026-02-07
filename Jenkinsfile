@@ -7,8 +7,8 @@ pipeline {
         GIT_CREDENTIALS_ID = 'github-ssh-credentials'
         GIT_BRANCH = 'main'
         
-        // Docker Hub credentials ID (configured in Jenkins)
-        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials'
+        // Docker Hub password (WARNING: HARDCODED - NOT SECURE)
+        DOCKER_PASSWORD = '2003$vimu'
         
         // Docker Hub username
         DOCKER_HUB_USERNAME = 'vimukthibuddika'
@@ -51,16 +51,8 @@ pipeline {
         stage('Docker Hub Login') {
             steps {
                 echo 'Logging into Docker Hub...'
-                script {
-                    // Using Jenkins credentials to login to Docker Hub
-                    withCredentials([usernamePassword(
-                        credentialsId: "${DOCKER_CREDENTIALS_ID}",
-                        usernameVariable: 'DOCKER_USER',
-                        passwordVariable: 'DOCKER_PASS'
-                    )]) {
-                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    }
-                }
+                // WARNING: Login using hardcoded password
+                sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin'
             }
         }
         
